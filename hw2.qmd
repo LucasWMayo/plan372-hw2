@@ -14,6 +14,16 @@ library(lubridate)
 Load the data from CSV.
 
 ```{r}
+install.packages("ggplot2")
+```
+
+(the above and below is a result from where I made a mistake trying to follow a guide to expand my graphs, and uninstalled a crucial package, and thus caused issues with most of my code).
+
+```{r}
+restaurant_inspections <- read.csv("C:/Users/lucas/Documents/plan372/plan372-hw2/restaurant_inspections.csv")
+```
+
+```{r}
 data <- read_csv("C:/Users/lucas/Documents/plan372/plan372-hw2/restaurant_inspections.csv")
 
 head(data)
@@ -100,8 +110,156 @@ This was very hard to read the city names properly, so I looked up how to change
 install.packages("ggplot2")
 ```
 
+This is the mistake that I referenced earlier, and now after various restarts and attempted fixes are hoping to ignore.
+
 ```{r}
 ggplot(city_scores, aes(x= CITY, y=avg_score)) +
   geom_col() +
   theme(axis.txt.x = element_text(margin=margin(t=10)))
 ```
+
+There seems to be fairly little variation of inspection scores by city.
+
+Question 4. Varying Inspection by Inspectors
+
+```{r}
+inspector_scores <- data |>
+  group_by(INSPECTOR) |>
+  summarize(avg_score =mean(SCORE, na.rm = TRUE)) |>
+  ungroup()
+```
+
+Here I attempted to group by the scores by inspectors in order to create the graph representing the differences in scores.
+
+```{r}
+ggplot(inspector_scores, aes(x = INSPECTOR, y = avg_score)) +
+  geom_col()
+```
+
+There does not seem to be a large amount of variation in the scores by the inspectors for the most part, but there is one inspector that seems to give out scores on average that are lower than any of the other inspectors.
+
+Question 5. Sample Size
+
+```{r}
+sample_sizes <- data |>
+  group_by(CITY) |>
+  summarize(count = n()) |>
+  ungroup()
+```
+
+Here I attempted to assess the sample sizes by creating a summary of the groups, and then afterwards displaying it and assessing the inspections per city.
+
+```{r}
+print(sample_sizes)
+```
+
+From viewing this, it can be seen that there could be a possible explanation for the results I came to above. There are various cities in which there is not a statistically significant amount of results for the sample sizes. For example, the cities of New Hill, Clayton, and Angier have results that could potentially not be representative.
+
+Question 6. Food-Service Facility Records
+
+```{r}
+facility_scores <- data |>
+  group_by(FACILITYTYPE) |>
+  summarize(avg_score = mean(SCORE, na.rm = TRUE)) |>
+  ungroup()
+
+ggplot(facility_scores, aes(x = FACILITYTYPE, y = avg_score)) +
+  geom_col()
+```
+
+The scores for restaurants do not seem to be higher than other types of facilities, they all seem to hover around the same scores. If anything, it appears that restaurant is scoring lower than the other food facilities.
+
+Question 7. Sanitation in Restaurants.
+
+```{r}
+restaurant_data <- data |>
+  filter(FACILITYTYPE == "Restaurant")
+```
+
+Filtering only for restaurants.
+
+Analysis of the distribution of inspection scores:
+
+```{r}
+ggplot(restaurant_data, aes(x = SCORE)) +
+  geom_histogram(bins = 100)
+```
+
+A somewhat similar trend to the before, with a bit of dip for the 100 scores.
+
+Analysis of the trend of scores by age of restaurant
+
+```{r}
+restaurant_data$RESTAURANTOPENDATE <- ymd_hms(restaurant_data$RESTAURANTOPENDATE)
+restaurant_data$age <- as.numeric(difftime(Sys.Date(), restaurant_data$RESTAURANTOPENDATE))
+```
+
+Here is converting the restaurants open dates to the correct date format of year, month, date, and calculating age.
+
+```{r}
+ggplot(restaurant_data, aes(x= age, y = SCORE)) +
+  geom_point()
+```
+
+Here is creating a scatter plot of the points of data, and seem to be very similar to the previous scatter plot as well. However, I forgot to convert the amount of days to years so I proceeded to do it in the next line.
+
+```{r}
+restaurant_data$RESTAURANTOPENDATE <- ymd_hms(restaurant_data$RESTAURANTOPENDATE)
+restaurant_data$age <- as.numeric(difftime(Sys.Date(), restaurant_data$RESTAURANTOPENDATE, units = "days")) / 365
+```
+
+```{r}
+ggplot(restaurant_data, aes(x= age, y = SCORE)) +
+  geom_point()
+```
+
+The outlier for age in the previous scatter plot including non-restaurants seems to have disappeared however, as there are no 40+ years of age restaurants here.
+
+Analysis of the inspection scores by city:
+
+```{r}
+restaurant_data$CITY <- str_to_upper(restaurant_data$CITY)
+restaurant_data$CITY <- recode (restaurant_data$CITY, "FUQUAY VARINA" = "FUQUAY-VARINA", "WAKE FOREST" = "WAKE FOREST", "MORRISVILE" = "MORRISVILLE", "HOLLY SPRING" = "HOLLY SPRINGS", "RESEARCH TRIANGLE PARK" = "RTP",  "CARY" = "CARY","RALEIGH" = "RALEIGH","KNIGHTDALE" = "KNIGHTDALE","CLAYTON" = "CLAYTON","GARNER" = "GARNER","MORRISVILLE" = "MORRISVILLE","WENDELL" = "WENDELL","APEX" = "APEX","WILLOW SPRING" = "WILLOW SPRING","ROLESVILLE" = "ROLESVILLE","ZEBULON" = "ZEBULON",  "NEW HILL" = "NEW HILL", "ANGIER" = "ANGIER")
+```
+
+Here I attempt to clean the names of the cities.
+
+```{r}
+city_scores <- restaurant_data |>
+  group_by(CITY) |>
+  summarise(Average_Score = mean(SCORE, na.rm = TRUE)) |>
+  ungroup()
+
+ggplot(city_scores, aes(x= CITY, y = Average_Score)) +
+  geom_col()
+```
+
+Above is where I created a column bar plot of the average scores by citites, and analyzed that there is very little variance between the average scores of the cities, similar to the lack of variance between all food facilities.
+
+Analysis 4 Inspector Score Variance
+
+```{r}
+inspector_scores <- restaurant_data |>
+  group_by(INSPECTOR) |>
+  summarize(Average_Score = mean(SCORE, na.rm = TRUE)) |>
+  ungroup()
+
+ggplot(inspector_scores, aes(x = INSPECTOR, y= Average_Score)) +
+  geom_col()
+```
+
+This graph also seems to follow the trend of the previous one, which had average scores by the inspectors around the same mark, with one individual with a significantly lower average score as well.
+
+Analysis of Sample Size
+
+```{r}
+city_sample_sizes <- restaurant_data |>
+  group_by(CITY) |>
+  summarise(Sample_Size = n()) |>
+  ungroup()
+
+ggplot(city_sample_sizes, aes (x=CITY, y= Sample_Size)) +
+  geom_col()
+```
+
+Here, rather than using a list like I did previously, decided to create a bar graph to showcase the differing degrees of samples sizes. This looks to be even more extreme than the previous one that analyzed all food facilities, as none are even close to matching the highest sample amount.
