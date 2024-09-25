@@ -1,0 +1,4 @@
+"0","ggplot(restaurant_inspections, aes(x= SCORE)) +"
+"0","  geom_histogram()"
+"1","[38;5;232m`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.[39m
+"

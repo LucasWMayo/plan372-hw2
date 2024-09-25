@@ -20,3 +20,12 @@ head(data)
 ```
 
 Used the head(data) like we commonly do in class in order to ensure that it was loaded correctly.
+
+Question 1. Visualizing distribution of inspection scores
+
+```{r}
+ggplot(restaurant_inspections, aes(x= SCORE)) +
+  geom_histogram()
+```
+
+Here I attempted to utilize what we did in class with line plots and apply it to a histogram.
