@@ -1,3 +1,6 @@
 "0","library(tidyverse)"
-"0","library(lubridate)"
-"0",""
+"2","Error: package or namespace load failed for ‘tidyverse’:
+ .onAttach failed in attachNamespace() for 'tidyverse', details:
+  call: library(pkg, lib.loc = loc, character.only = TRUE, warn.conflicts = FALSE)
+  error: there is no package called ‘ggplot2’
+"

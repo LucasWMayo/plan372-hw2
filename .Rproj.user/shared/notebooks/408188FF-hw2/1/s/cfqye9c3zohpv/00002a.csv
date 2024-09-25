@@ -1,2 +1,0 @@
-"0","ggplot(restaurant_inspections, aes(x= SCORE)) +"
-"0","  geom_histogram(bins = 100)"

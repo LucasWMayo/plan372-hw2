@@ -1,2 +1,0 @@
-"0","data$RESTAURANTOPENDATE <- ymd_hms(data$RESTAURANTOPENDATE)"
-"0","data$age <- as.numeric(difftime(Sys.Date(), data$RESTAURANTOPENDATE, units = ""days"")) /365"

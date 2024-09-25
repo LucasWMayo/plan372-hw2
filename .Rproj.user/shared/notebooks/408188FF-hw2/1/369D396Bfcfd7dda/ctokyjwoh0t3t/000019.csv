@@ -1,5 +1,0 @@
-"0","ggplot(data, aes(x = age, y = SCORE)) +"
-"0","  geom_point() "
-"2","Warning:"
-"2"," [38;5;232mRemoved 296 rows containing missing values or values outside the scale range (`geom_point()`).[39m
-"
