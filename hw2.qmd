@@ -38,6 +38,8 @@ ggplot(restaurant_inspections, aes(x= SCORE)) +
   geom_histogram(bins = 100)
 ```
 
+Additionally, at this point 296 rows containing missing values or values outside the scale range were removed. This could potentially impact the average scores and how they are presented in this histogram, as some scores that were lost could have been lower than the 75 mark and add additional points.
+
 Here I attempted to utilize what we did in class with line plots and apply it to a histogram. The data mentioned that I should use a better value, as it was originally using 'bins = 30' so I changed it to 100.
 
 Question 2. Older and Newer Restaurant Inspection Scores
@@ -263,3 +265,7 @@ ggplot(city_sample_sizes, aes (x=CITY, y= Sample_Size)) +
 ```
 
 Here, rather than using a list like I did previously, decided to create a bar graph to showcase the differing degrees of samples sizes. This looks to be even more extreme than the previous one that analyzed all food facilities, as none are even close to matching the highest sample amount.
+
+<https://github.com/LucasWMayo/plan372-hw2>
+
+Above is the requested link to the Github repository.
