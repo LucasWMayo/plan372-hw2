@@ -4,3 +4,11 @@ author: "Lucas Mayo"
 format: html
 editor: visual
 ---
+
+```{r}
+library(tidyverse)
+library(lubridate)
+
+```
+
+Load the data from CSV.\
