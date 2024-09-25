@@ -1,0 +1,5 @@
+"0","city_scores <- data |>"
+"0","  group_by(CITY) |>"
+"0","  summarize(avg_score = mean(SCORE, na.rm = TRUE)) |>"
+"0","  ungroup()"
+"0",""

@@ -45,3 +45,46 @@ ggplot(data, aes(x = age, y = SCORE)) +
 ```
 
 Here I used geom_point to create a scatter plot, as while scrolling the geom\_ commands it seemed to be the best reflection. There does seem to be a very slight trend, because the newer restaurants have a few scores that dip closer to the 80 range, while the older restaurants do not, but it does seem very slight at best.
+
+Question 3. Varying Inspection Score
+
+```{r}
+different_cities <- unique(data$CITY)
+print(different_cities)
+```
+
+I attempted to move on to question 3, before realizing that I did not know all the different city names and variations used in the data.
+
+```{r}
+data$CITY <- str_to_upper(data$CITY)
+data$CITY <- recode(data$CITY, "FUQUAY VARINA" = "FUQUAY-VARINA",
+                    "WAKE FOREST" = "WAKE FOREST",
+                    "MORRISVILE" = "MORRISVILLE",
+                    "HOLLY SPRING" = "HOLLY SPRINGS",
+                    "RESEARCH TRIANGLE PARK" = "RTP",
+                    "CARY" = "CARY",
+                    "RALEIGH" = "RALEIGH",
+                    "KNIGHTDALE" = "KNIGHTDALE",
+                    "CLAYTON" = "CLAYTON",
+                    "GARNER" = "GARNER",
+                    "MORRISVILLE" = "MORRISVILLE",
+                    "WENDELL" = "WENDELL",
+                    "APEX" = "APEX",
+                    "WILLOW SPRING" = "WILLOW SPRING",
+                    "ROLESVILLE" = "ROLESVILLE",
+                    "ZEBULON" = "ZEBULON",
+                    "NEW HILL" = "NEW HILL",
+                    "ANGIER" = "ANGIER")
+```
+
+I made an effort to recode like we did the SFpark exercise here.
+
+```{r}
+city_scores <- data |>
+  group_by(CITY) |>
+  summarize(avg_score = mean(SCORE, na.rm = TRUE)) |>
+  ungroup()
+
+```
+
+Using the above I attempted to ensure that NA values would be ignored.
